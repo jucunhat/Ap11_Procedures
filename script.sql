@@ -1,3 +1,10 @@
+CREATE TABLE log(
+	cod_log SERIAL PRIMARY KEY,
+	data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	procedimento VARCHAR(100) NOT NULL
+);
+SELECT * FROM log
+
 -- CREATE OR REPLACE PROCEDURE sp_obter_notas_para_compor_o_troco (OUT resultado
 -- VARCHAR(500), IN troco INT)
 -- LANGUAGE plpgsql
@@ -12,6 +19,7 @@
 -- notas2 INT := 0;
 -- moedas1 INT := 0;
 -- BEGIN
+-- INSERT INTO log (procedimento) VALUES ('notas de troco obtidas');
 -- notas200 := troco / 200;
 -- notas100 := troco % 200 / 100;
 -- notas50 := troco % 200 % 100 / 50;
@@ -59,6 +67,7 @@
 -- LANGUAGE plpgsql
 -- AS $$
 -- BEGIN
+-- INSERT INTO log (procedimento) VALUES ('troco calculado');
 -- troco := valor_a_pagar - valor_total;
 -- END;
 -- $$
@@ -89,6 +98,7 @@
 -- RAISE 'R$% insuficiente para pagar a conta de R$%', valor_a_pagar,
 -- valor_total;
 -- ELSE
+-- INSERT INTO log (procedimento) VALUES ('pedido fechado');
 -- UPDATE tb_pedido p SET
 -- data_modificacao = CURRENT_TIMESTAMP,
 -- status = 'fechado'
@@ -109,6 +119,7 @@
 -- LANGUAGE plpgsql
 -- AS $$
 -- BEGIN
+-- INSERT INTO log (procedimento) VALUES ('valor do pedido calculado');
 -- SELECT SUM(valor) FROM
 -- tb_pedido p
 -- INNER JOIN tb_item_pedido ip ON
@@ -135,6 +146,7 @@
 -- BEGIN
 -- --insere novo item
 -- INSERT INTO tb_item_pedido (cod_item, cod_pedido) VALUES ($1, $2);
+--INSERT INTO log (procedimento) VALUES ('itens adicionados a pedido');
 -- --atualiza data de modificação do pedido
 -- UPDATE tb_pedido p SET data_modificacao = CURRENT_TIMESTAMP WHERE
 -- p.cod_pedido = $2;
@@ -149,6 +161,7 @@
 -- AS $$
 -- BEGIN
 -- INSERT INTO tb_pedido (cod_cliente) VALUES (cod_cliente);
+-- INSERT INTO log (procedimento) VALUES ('pedido criado');
 -- -- obtém o último valor gerado por SERIAL
 -- SELECT LASTVAL() INTO cod_pedido;
 -- END;
@@ -177,8 +190,10 @@
 -- BEGIN
 -- IF codigo IS NULL THEN
 -- INSERT INTO tb_cliente (nome) VALUES (nome);
+-- INSERT INTO log (procedimento) VALUES ('cadastro de cliente');
 -- ELSE
 -- INSERT INTO tb_cliente (codigo, nome) VALUES (codigo, nome);
+-- INSERT INTO log (procedimento) VALUES ('cadastro de cliente');
 -- END IF;
 -- END;
 -- $$
