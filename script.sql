@@ -1,25 +1,47 @@
---Exercicio 1.4
---Não entendi como esse seria diferente do exercicio anterior
-DROP PROCEDURE sp_conta_pedido3
-CREATE OR REPLACE PROCEDURE sp_conta_pedido3 (IN codigo INT, OUT resultado INT)
+-- Exercicio 5
+CREATE OR REPLACE PROCEDURE sp_cadastra_cliente_variadic ( VARIADIC clientes VARCHAR [])
 LANGUAGE plpgsql
 AS $$
-DECLARE 
-	contagem INTEGER;
-	codigo INT := 1;
+DECLARE
+	cliente VARCHAR;
 BEGIN
-	SELECT COUNT(cod_cliente) INTO contagem FROM tb_pedido WHERE codigo = cod_cliente;
-	resultado := contagem;
+	FOREACH cliente IN ARRAY clientes LOOP
+		CALL sp_cadastrar_cliente(cliente);
+	END LOOP;
+RAISE NOTICE 'Os clientes % foram cadastrados', clientes ;
 END;
 $$
 DO $$
 DECLARE
-	resultado INT;
-	codigo INT;
+	clientes VARCHAR;
 BEGIN
-	CALL sp_conta_pedido3(codigo, resultado);
-	RAISE NOTICE 'O cliente tem % pedidos', resultado;
+	CALL sp_cadastra_cliente_variadic('Julia', 'Joabe');
 END $$;
+
+SELECT * FROM tb_cliente
+
+-- --Exercicio 1.4
+-- --Não entendi como esse seria diferente do exercicio anterior
+-- DROP PROCEDURE sp_conta_pedido3
+-- CREATE OR REPLACE PROCEDURE sp_conta_pedido3 (IN codigo INT, OUT resultado INT)
+-- LANGUAGE plpgsql
+-- AS $$
+-- DECLARE 
+-- 	contagem INTEGER;
+-- 	codigo INT := 1;
+-- BEGIN
+-- 	SELECT COUNT(cod_cliente) INTO contagem FROM tb_pedido WHERE codigo = cod_cliente;
+-- 	resultado := contagem;
+-- END;
+-- $$
+-- DO $$
+-- DECLARE
+-- 	resultado INT;
+-- 	codigo INT;
+-- BEGIN
+-- 	CALL sp_conta_pedido3(codigo, resultado);
+-- 	RAISE NOTICE 'O cliente tem % pedidos', resultado;
+-- END $$;
 
 -- --Exercicio 1.3
 -- DROP PROCEDURE sp_conta_pedido2
