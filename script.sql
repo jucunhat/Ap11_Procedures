@@ -1,24 +1,44 @@
-Exercicio 1.2
-CREATE OR REPLACE PROCEDURE sp_conta_pedido (IN codigo INT DEFAULT NULL)
+--Exercicio 1.3
+DROP PROCEDURE sp_conta_pedido2
+CREATE OR REPLACE PROCEDURE sp_conta_pedido2 (IN codigo INT, OUT resultado INT)
 LANGUAGE plpgsql
 AS $$
-DECLARE contagem INTEGER;
+DECLARE 
+	contagem INTEGER;
 BEGIN
-	IF codigo IS NOT NULL THEN
-		SELECT COUNT(cod_cliente) INTO contagem FROM tb_pedido WHERE codigo = cod_cliente;
-		RAISE NOTICE 'O cliente % tem % pedidos', codigo, contagem;
-	ELSE
-		RAISE NOTICE 'Código Invalido';
-	END IF;
+	SELECT COUNT(cod_cliente) INTO contagem FROM tb_pedido WHERE codigo = cod_cliente;
+	resultado := contagem;
 END;
 $$
 DO $$
 DECLARE
-	codigo INT :=1;
+	resultado INT;
 BEGIN
-	CALL sp_conta_pedido (codigo);
-END
-$$;
+	CALL sp_conta_pedido2(1, resultado);
+	RAISE NOTICE 'O cliente tem % pedidos', resultado;
+END $$;
+
+-- Exercicio 1.2
+-- CREATE OR REPLACE PROCEDURE sp_conta_pedido (IN codigo INT DEFAULT NULL)
+-- LANGUAGE plpgsql
+-- AS $$
+-- DECLARE contagem INTEGER;
+-- BEGIN
+-- 	IF codigo IS NOT NULL THEN
+-- 		SELECT COUNT(cod_cliente) INTO contagem FROM tb_pedido WHERE codigo = cod_cliente;
+-- 		RAISE NOTICE 'O cliente % tem % pedidos', codigo, contagem;
+-- 	ELSE
+-- 		RAISE NOTICE 'Código Invalido';
+-- 	END IF;
+-- END;
+-- $$
+-- DO $$
+-- DECLARE
+-- 	codigo INT :=1;
+-- BEGIN
+-- 	CALL sp_conta_pedido (codigo);
+-- END
+-- $$;
 
 -- CREATE TABLE log(
 -- 	cod_log SERIAL PRIMARY KEY,
