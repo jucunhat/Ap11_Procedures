@@ -1,9 +1,31 @@
-CREATE TABLE log(
-	cod_log SERIAL PRIMARY KEY,
-	data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-	procedimento VARCHAR(100) NOT NULL
-);
-SELECT * FROM log
+Exercicio 1.2
+CREATE OR REPLACE PROCEDURE sp_conta_pedido (IN codigo INT DEFAULT NULL)
+LANGUAGE plpgsql
+AS $$
+DECLARE contagem INTEGER;
+BEGIN
+	IF codigo IS NOT NULL THEN
+		SELECT COUNT(cod_cliente) INTO contagem FROM tb_pedido WHERE codigo = cod_cliente;
+		RAISE NOTICE 'O cliente % tem % pedidos', codigo, contagem;
+	ELSE
+		RAISE NOTICE 'Código Invalido';
+	END IF;
+END;
+$$
+DO $$
+DECLARE
+	codigo INT :=1;
+BEGIN
+	CALL sp_conta_pedido (codigo);
+END
+$$;
+
+-- CREATE TABLE log(
+-- 	cod_log SERIAL PRIMARY KEY,
+-- 	data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+-- 	procedimento VARCHAR(100) NOT NULL
+-- );
+-- SELECT * FROM log
 
 -- CREATE OR REPLACE PROCEDURE sp_obter_notas_para_compor_o_troco (OUT resultado
 -- VARCHAR(500), IN troco INT)
