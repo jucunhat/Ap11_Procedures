@@ -1,10 +1,12 @@
---Exercicio 1.3
-DROP PROCEDURE sp_conta_pedido2
-CREATE OR REPLACE PROCEDURE sp_conta_pedido2 (IN codigo INT, OUT resultado INT)
+--Exercicio 1.4
+--Não entendi como esse seria diferente do exercicio anterior
+DROP PROCEDURE sp_conta_pedido3
+CREATE OR REPLACE PROCEDURE sp_conta_pedido3 (IN codigo INT, OUT resultado INT)
 LANGUAGE plpgsql
 AS $$
 DECLARE 
 	contagem INTEGER;
+	codigo INT := 1;
 BEGIN
 	SELECT COUNT(cod_cliente) INTO contagem FROM tb_pedido WHERE codigo = cod_cliente;
 	resultado := contagem;
@@ -13,10 +15,31 @@ $$
 DO $$
 DECLARE
 	resultado INT;
+	codigo INT;
 BEGIN
-	CALL sp_conta_pedido2(1, resultado);
+	CALL sp_conta_pedido3(codigo, resultado);
 	RAISE NOTICE 'O cliente tem % pedidos', resultado;
 END $$;
+
+-- --Exercicio 1.3
+-- DROP PROCEDURE sp_conta_pedido2
+-- CREATE OR REPLACE PROCEDURE sp_conta_pedido2 (IN codigo INT, OUT resultado INT)
+-- LANGUAGE plpgsql
+-- AS $$
+-- DECLARE 
+-- 	contagem INTEGER;
+-- BEGIN
+-- 	SELECT COUNT(cod_cliente) INTO contagem FROM tb_pedido WHERE codigo = cod_cliente;
+-- 	resultado := contagem;
+-- END;
+-- $$
+-- DO $$
+-- DECLARE
+-- 	resultado INT;
+-- BEGIN
+-- 	CALL sp_conta_pedido2(1, resultado);
+-- 	RAISE NOTICE 'O cliente tem % pedidos', resultado;
+-- END $$;
 
 -- Exercicio 1.2
 -- CREATE OR REPLACE PROCEDURE sp_conta_pedido (IN codigo INT DEFAULT NULL)
